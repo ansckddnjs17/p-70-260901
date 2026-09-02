@@ -24,3 +24,5 @@ public class RsData<T> {
         return Integer.parseInt(resultCode.split("-")[0]); // "201-1"
     }
 }
+
+
