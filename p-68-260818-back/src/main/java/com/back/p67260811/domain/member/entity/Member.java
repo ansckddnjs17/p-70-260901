@@ -19,13 +19,13 @@ public class Member extends BaseEntity {
     private String nickname;
 
     @Column(unique = true)
-    private String apikey;
+    private String apiKey;
 
     public Member(String username, String password, String nickname) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
-        this.apikey= UUID.randomUUID().toString();
+        this.apiKey= UUID.randomUUID().toString();
     }
 
 }
