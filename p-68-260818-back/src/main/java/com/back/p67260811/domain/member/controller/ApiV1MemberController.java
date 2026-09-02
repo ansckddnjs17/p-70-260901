@@ -38,7 +38,7 @@ public class ApiV1MemberController {
     ) {
     }
 
-    @PostMapping()
+    @PostMapping("/join")
     public RsData<MemberDto> join(
             @RequestBody @Valid JoinReqBody reqBody
     ) {
@@ -70,20 +70,21 @@ public class ApiV1MemberController {
             String apiKey
     ){}
 
-    @GetMapping()
+    @PostMapping("/login")
     public RsData<MemberDto> login(
             @RequestBody @Valid LoginReqBody reqBody
     ) {
 
-        //1.회원 존재 여부
-        Member actor=memberService.findByUsername(reqBody.username).orElseThrow(
-                ()->new ServiceException("401-1","존재하지 않는 회원입니다.")
+        // 1. 회원 존재 여부
+        Member actor = memberService.findByUsername(reqBody.username).orElseThrow(
+                () -> new ServiceException("401-1", "존재하지 않는 회원입니다.")
         );
-        //2.존재하면 비밀 번호 체크
-        if(!actor.getPassword().equals(reqBody.password)){
-            throw new ServiceException("401-2","비밀번호가 일치하지 않습니다.");
+        // 2. 존재하면 비밀 번호 체크
+        if(!actor.getPassword().equals(reqBody.password)) {
+            throw new ServiceException("401-2", "비밀번호가 일치하지 않습니다.");
         }
-        //3. 비밀번호가 맞으면 인증 데이터(apikey) 제공
+        // 3. 비밀 번호가 맞으면 인증 데이터(apiKey) 제공
+
         return new RsData(
                 "200-1",
                 "%s님 반갑습니다!".formatted(actor.getNickname()),
