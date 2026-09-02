@@ -7,6 +7,7 @@ import com.back.p67260811.domain.post.post.entity.Post;
 import com.back.p67260811.domain.post.post.service.PostService;
 import com.back.p67260811.global.dto.RsData;
 import com.back.p67260811.global.exception.ServiceException;
+import com.back.p67260811.global.rq.Rq;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -24,6 +25,7 @@ public class ApiV1PostController {
 
     private final PostService postService;
     private final MemberService memberService;
+    private final Rq rq;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<PostDto> list() {
@@ -66,11 +68,7 @@ public class ApiV1PostController {
             @RequestHeader("Authorization") String apiKey
     ) {
 
-        String authorization=apiKey.substring(7);
-
-        Member actor = memberService.findByApiKey(authorization).orElseThrow(
-                () -> new ServiceException("401-1","API Key가 유효하지 않습니다.")
-        );
+        Member actor=rq.getActor();
         Post post = postService.write(actor, reqBody.title, reqBody.content);
         return new RsData<>(
                 "201-1",
@@ -98,11 +96,7 @@ public class ApiV1PostController {
             @RequestHeader("Authorization") String apiKey
     ) {
 
-        String authorization=apiKey.substring(7);
-
-        Member actor = memberService.findByApiKey(authorization).orElseThrow(
-                () -> new ServiceException("401-1","API Key가 유효하지 않습니다.")
-        );
+        Member actor=rq.getActor();
 
         Post post = postService.findById(id).get();
 
@@ -124,11 +118,7 @@ public class ApiV1PostController {
             @RequestHeader("Authorization") String apiKey
     ) {
 
-        String authorization=apiKey.substring(7);
-
-        Member actor = memberService.findByApiKey(authorization).orElseThrow(
-                () -> new ServiceException("401-1","API Key가 유효하지 않습니다.")
-        );
+        Member actor=rq.getActor();
 
         Post post = postService.findById(id).get();
 
