@@ -64,8 +64,7 @@ public class ApiV1PostController {
     @PostMapping
     @Transactional
     public RsData<PostDto> write(
-            @Valid @RequestBody PostWriteReqBody reqBody,
-            @RequestHeader("Authorization") String apiKey
+            @Valid @RequestBody PostWriteReqBody reqBody
     ) {
 
         Member actor=rq.getActor();
@@ -92,17 +91,14 @@ public class ApiV1PostController {
     @Transactional
     public RsData<Void> modify(
             @PathVariable int id,
-            @Valid @RequestBody PostModifyReqBody reqBody,
-            @RequestHeader("Authorization") String apiKey
+            @Valid @RequestBody PostModifyReqBody reqBody
     ) {
 
         Member actor=rq.getActor();
 
         Post post = postService.findById(id).get();
 
-        if(!actor.equals(post.getAuthor())){
-            throw new ServiceException("403-1","수정 권한이 없습니다.");
-        }
+        post.checkActorModify(actor);
 
         postService.modify(post, reqBody.title, reqBody.content);
 
@@ -114,17 +110,14 @@ public class ApiV1PostController {
 
     @DeleteMapping("/{id}")
     public RsData<Void> delete(
-            @PathVariable int id,
-            @RequestHeader("Authorization") String apiKey
+            @PathVariable int id
     ) {
 
         Member actor=rq.getActor();
 
         Post post = postService.findById(id).get();
 
-        if(!actor.equals(post.getAuthor())){
-            throw new ServiceException("403-1","삭제 권한이 없습니다.");
-        }
+        post.checkActorDelete(actor);
 
         postService.delete(id);
 
