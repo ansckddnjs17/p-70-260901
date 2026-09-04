@@ -2,6 +2,7 @@ package com.back.p67260811.domain.member.service;
 
 import com.back.p67260811.domain.member.entity.Member;
 import com.back.p67260811.standard.Ut;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -9,8 +10,10 @@ import java.util.Map;
 @Service
 public class AuthTokenService {
 
-    private String secretPattern= "abcdefghijklmnopqrstuvwxyz1234567890abcdefghijklmnopqrstuvwxyz1234567890";
-    private long expireSeconds = 1000L * 60 * 60 * 24 * 365;
+    @Value("${custom.jwt.secretPattern}")
+    private String secretPattern;
+    @Value("${custom.jwt.expireSeconds}")
+    private long expireSeconds;
 
     public String genAccessToken(Member member) {
 
