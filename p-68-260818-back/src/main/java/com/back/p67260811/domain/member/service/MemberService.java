@@ -6,6 +6,7 @@ import com.back.p67260811.global.exception.ServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -46,5 +47,13 @@ public class MemberService {
     }
     public String genAccessToken(Member actor) {
         return authTokenService.genAccessToken(actor);
+    }
+
+    public Map<String, Object> payloadOrNull(String jwt) {
+        return authTokenService.payloadOrNull(jwt);
+    }
+
+    public Optional<Member> findById(int id) {
+        return memberRepository.findById(id);
     }
 }
