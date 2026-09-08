@@ -87,9 +87,7 @@ public class ApiV1MemberController {
                 () -> new ServiceException("401-1", "존재하지 않는 회원입니다.")
         );
         // 2. 존재하면 비밀 번호 체크
-        if(!actor.getPassword().equals(reqBody.password)) {
-            throw new ServiceException("401-2", "비밀번호가 일치하지 않습니다.");
-        }
+        memberService.checkPassword(reqBody.password, actor.getPassword());
         String accessToken = memberService.genAccessToken(actor);
 
         // 3. 비밀 번호가 맞으면 인증 데이터(apiKey) 제공
